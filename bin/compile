@@ -39,6 +39,7 @@ wget http://www.monkey.org/~provos/libevent-1.4.13-stable.tar.gz
 tar zxvf libevent-1.4.13-stable.tar.gz
 cd libevent-1.4.13-stable/
 ./configure
+topic "building libevent..."
 make
 make install
 
