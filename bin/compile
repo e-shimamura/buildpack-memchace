@@ -35,13 +35,23 @@ mkdir "$BUILD_DIR"/memcached-build
 cd "$BUILD_DIR"/memcached-build
 
 topic "Downloading libevent..."
-wget http://www.monkey.org/~provos/libevent-1.4.13-stable.tar.gz
-tar zxvf libevent-1.4.13-stable.tar.gz
-cd libevent-1.4.13-stable/
-./configure
-topic "building libevent..."
+
+set -e
+set -o pipefail
+
+libevent_version="0.1.0"
+
+curl -L "http://pecl.php.net/get/libevent-${libevent_version}.tgz" \
+    | tar xzv
+
+cd libevent-${libevent_version}
+/app/vendor/php/bin/phpize
+./configure --with-php-config=/app/vendor/php/bin/php-config
+
 make
-make install
+cp modules/libevent.so "$EXT_DIR/libevent.so"
+echo "extension=libevent.so" > "$PREFIX/etc/conf.d/libevent.ini"
+
 
 topic "Downloading memcache..."
 cd ../
